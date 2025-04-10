@@ -1,38 +1,52 @@
-const DURATION = 10; // 10 seconds
-let remainingTime = DURATION; // Countdown starting from 10
-let timer = null; // Variable to store the interval
+const DURATION = 10;
+let remainingTime = DURATION;
+let timer = null;
 
+const startBtn = document.querySelector("#start-btn");
+const timeDisplay = document.querySelector("#time");
 
+const toast = document.querySelector("#toast");
+const toastMessage = document.querySelector("#toast-message");
+const closeToast = document.querySelector("#close-toast");
 
-// ITERATION 1: Add event listener to the start button
+startBtn.addEventListener("click", startCountdown);
 
-// Your code goes here ...
-
-
-
-
-// ITERATION 2: Start Countdown
 function startCountdown() {
-  console.log("startCountdown called!");
+  if (timer !== null) return;
 
+  startBtn.disabled = true;
+  timeDisplay.textContent = remainingTime;
 
-  // Your code goes here ...
+  timer = setInterval(() => {
+    if (remainingTime === 0) {
+      clearInterval(timer);
+      timer = null;
+      showToast("Lift off! 🚀");
+      startBtn.disabled = false;
+      remainingTime = DURATION;
+    } else {
+      remainingTime--;
+      const randomColor = getRandomColor();
+      document.documentElement.style.setProperty("--timer-color", randomColor);
+      timeDisplay.textContent = remainingTime;
+    }
+  }, 1000);
 }
 
-
-
-
-// ITERATION 3: Show Toast
 function showToast(message) {
-  console.log("showToast called!");
+  toastMessage.textContent = message;
+  toast.classList.add("show");
+}
 
-  // Your code goes here ...
+closeToast.addEventListener("click", () => {
+  toast.classList.remove("show");
+});
 
-
-
-
-  // BONUS: ITERATION 4: TOAST CLOSE BUTTON
-
-  // Your code goes here ...
-
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
