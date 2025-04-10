@@ -17,14 +17,18 @@ function startCountdown() {
   startBtn.disabled = true;
   timeDisplay.textContent = remainingTime;
 
+  showToast("⏰ Final countdown! ⏰");
+
   timer = setInterval(() => {
     if (remainingTime === 0) {
       clearInterval(timer);
       timer = null;
-      showToast("Lift off! 🚀");
-      startBtn.disabled = false;
+      showToast("Lift off! 🚀", true);
       remainingTime = DURATION;
     } else {
+      if (remainingTime === 5) {
+        showToast("Start the engines! 💥");
+      }
       remainingTime--;
       const randomColor = getRandomColor();
       document.documentElement.style.setProperty("--timer-color", randomColor);
@@ -33,13 +37,20 @@ function startCountdown() {
   }, 1000);
 }
 
-function showToast(message) {
+function showToast(message, showCloseButton = false) {
   toastMessage.textContent = message;
   toast.classList.add("show");
+
+  if (showCloseButton) {
+    closeToast.style.display = "inline";
+  } else {
+    closeToast.style.display = "none";
+  }
 }
 
 closeToast.addEventListener("click", () => {
   toast.classList.remove("show");
+  startBtn.disabled = false;
 });
 
 function getRandomColor() {
